@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+    {{ scholarship.title }} - تفاصيل المنحة
+    {% else %}
+    {{ scholarship.title }} - Scholarship Details
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Main Content -->
+    <div class="col-lg-8">
+        <!-- Scholarship Details Card -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <span class="badge bg-success mb-2">{{ scholarship.country }}</span>
+                        <h1 class="h2 mb-1">{{ scholarship.title }}</h1>
+                        <h5 class="text-muted">{{ scholarship.organization }}</h5>
+                    </div>
+                    
+                    {% if current_user.is_authenticated %}
+                        {% if is_saved %}
+                        <form action="{{ url_for('unsave_scholarship', scholarship_id=scholarship.id) }}" method="POST">
+                            <button type="submit" class="btn btn-outline-success">
+                                <i class="fa-solid fa-bookmark me-2"></i>
+                                {% if current_user.language_preference == 'ar' %}
+                                محفوظ
+                                {% else %}
+                                Saved
+                                {% endif %}
+                            </button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('save_scholarship', scholarship_id=scholarship.id) }}" method="POST">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa-regular fa-bookmark me-2"></i>
+                                {% if current_user.language_preference == 'ar' %}
+                                حفظ المنحة
+                                {% else %}
+                                Save Scholarship
+                                {% endif %}
+                            </button>
+                        </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-light rounded-circle p-2 me-2">
+                                <i class="fa-solid fa-globe text-success"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    الدولة
+                                    {% else %}
+                                    Country
+                                    {% endif %}
+                                </small>
+                                <span>{{ scholarship.country }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-light rounded-circle p-2 me-2">
+                                <i class="fa-solid fa-money-bill-wave text-success"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    قيمة المنحة
+                                    {% else %}
+                                    Amount
+                                    {% endif %}
+                                </small>
+                                <span>{{ scholarship.amount }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-light rounded-circle p-2 me-2">
+                                <i class="fa-solid fa-calendar-alt text-success"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    الموعد النهائي
+                                    {% else %}
+                                    Deadline
+                                    {% endif %}
+                                </small>
+                                <span>{{ scholarship.deadline.strftime('%Y-%m-%d') if scholarship.deadline else 'Not specified' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-light rounded-circle p-2 me-2">
+                                <i class="fa-solid fa-book text-success"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    مجال الدراسة
+                                    {% else %}
+                                    Field of Study
+                                    {% endif %}
+                                </small>
+                                <span>{{ scholarship.field_of_study }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <!-- Scholarship Description -->
+                <div class="mt-4">
+                    <h5>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        وصف المنحة
+                        {% else %}
+                        Description
+                        {% endif %}
+                    </h5>
+                    <div class="scholarship-description">
+                        {{ scholarship.description|safe }}
+                    </div>
+                </div>
+                
+                <!-- Scholarship Eligibility -->
+                <div class="mt-4">
+                    <h5>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        المؤهلات / شروط القبول
+                        {% else %}
+                        Eligibility
+                        {% endif %}
+                    </h5>
+                    <div class="scholarship-eligibility">
+                        {{ scholarship.eligibility|safe }}
+                    </div>
+                </div>
+                
+                {% if scholarship.url %}
+                <div class="mt-4 text-center">
+                    <a href="{{ scholarship.url }}" target="_blank" class="btn btn-success btn-lg">
+                        <i class="fa-solid fa-external-link-alt me-2"></i>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        التقدم للمنحة
+                        {% else %}
+                        Apply for this Scholarship
+                        {% endif %}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+        <!-- Organization Info -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    عن المؤسسة
+                    {% else %}
+                    About the Organization
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6 class="card-title">{{ scholarship.organization }}</h6>
+                <p class="card-text text-muted">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    المؤسسة التي تقدم هذه المنحة الدراسية.
+                    {% else %}
+                    The institution offering this scholarship.
+                    {% endif %}
+                </p>
+                
+                {% if scholarship.url %}
+                <a href="{{ scholarship.url }}" target="_blank" class="btn btn-outline-success w-100">
+                    <i class="fa-solid fa-globe me-2"></i>
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    زيارة الموقع الرسمي
+                    {% else %}
+                    Visit Official Website
+                    {% endif %}
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Key Dates -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    التواريخ المهمة
+                    {% else %}
+                    Key Dates
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span>
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            تاريخ النشر
+                            {% else %}
+                            Published Date
+                            {% endif %}
+                        </span>
+                        <span class="text-muted">{{ scholarship.posted_at.strftime('%Y-%m-%d') }}</span>
+                    </li>
+                    {% if scholarship.deadline %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span>
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            الموعد النهائي للتقديم
+                            {% else %}
+                            Application Deadline
+                            {% endif %}
+                        </span>
+                        <span class="text-danger">{{ scholarship.deadline.strftime('%Y-%m-%d') }}</span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Related Scholarships -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    منح دراسية مشابهة
+                    {% else %}
+                    Similar Scholarships
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                {% if related_scholarships %}
+                <div class="list-group list-group-flush">
+                    {% for rel_scholarship in related_scholarships %}
+                    <a href="{{ url_for('scholarship_detail', scholarship_id=rel_scholarship.id) }}" class="list-group-item list-group-item-action p-3">
+                        <h6 class="mb-1">{{ rel_scholarship.title }}</h6>
+                        <p class="mb-1 text-muted small">{{ rel_scholarship.organization }}</p>
+                        <div class="d-flex justify-content-between">
+                            <small>
+                                <i class="fa-solid fa-money-bill-wave me-1"></i>
+                                {{ rel_scholarship.amount }}
+                            </small>
+                            {% if rel_scholarship.deadline %}
+                            <small class="text-muted">{{ rel_scholarship.deadline.strftime('%Y-%m-%d') }}</small>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="p-4 text-center text-muted">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    لا توجد منح دراسية مشابهة في الوقت الحالي
+                    {% else %}
+                    No similar scholarships found at the moment
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

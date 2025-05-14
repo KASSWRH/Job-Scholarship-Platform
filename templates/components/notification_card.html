@@ -1,0 +1,57 @@
+<div class="list-group-item p-4 {{ 'unread' if not notification.is_read else '' }}" data-notification-id="{{ notification.id }}">
+    <div class="d-flex">
+        {% if notification.notification_type == 'job' %}
+        <div class="notification-icon bg-primary text-white rounded-circle p-3 me-3">
+            <i class="fa-solid fa-briefcase"></i>
+        </div>
+        {% elif notification.notification_type == 'scholarship' %}
+        <div class="notification-icon bg-success text-white rounded-circle p-3 me-3">
+            <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        {% else %}
+        <div class="notification-icon bg-secondary text-white rounded-circle p-3 me-3">
+            <i class="fa-solid fa-bell"></i>
+        </div>
+        {% endif %}
+        
+        <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0 {{ 'fw-bold' if not notification.is_read else '' }}">{{ notification.title }}</h5>
+                <small class="text-muted">{{ notification.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            </div>
+            <p class="mb-0">{{ notification.message }}</p>
+            
+            {% if notification.notification_type == 'job' and notification.related_id %}
+            <div class="mt-2">
+                <a href="{{ url_for('job_detail', job_id=notification.related_id) }}" class="btn btn-sm btn-outline-primary">
+                    <i class="fa-solid fa-external-link-alt me-1"></i>
+                    {% if current_user.language_preference == 'ar' %}
+                    عرض الوظيفة
+                    {% else %}
+                    View Job
+                    {% endif %}
+                </a>
+            </div>
+            {% elif notification.notification_type == 'scholarship' and notification.related_id %}
+            <div class="mt-2">
+                <a href="{{ url_for('scholarship_detail', scholarship_id=notification.related_id) }}" class="btn btn-sm btn-outline-success">
+                    <i class="fa-solid fa-external-link-alt me-1"></i>
+                    {% if current_user.language_preference == 'ar' %}
+                    عرض المنحة
+                    {% else %}
+                    View Scholarship
+                    {% endif %}
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="ms-3">
+            {% if not notification.is_read %}
+            <button class="btn btn-sm btn-outline-secondary mark-read-btn" data-notification-id="{{ notification.id }}">
+                <i class="fa-solid fa-check"></i>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="card h-100 border document-card">
+    <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+            <div class="document-icon 
+                        {% if document.file_type == 'cv' %}
+                        bg-primary bg-opacity-10 text-primary
+                        {% elif document.file_type == 'cover_letter' %}
+                        bg-secondary bg-opacity-10 text-secondary
+                        {% else %}
+                        bg-info bg-opacity-10 text-info
+                        {% endif %}
+                        p-2 rounded me-3">
+                <i class="fa-solid fa-file-alt fa-lg"></i>
+            </div>
+            <div>
+                <h5 class="card-title mb-0 text-truncate">{{ document.title }}</h5>
+                <small class="text-muted">{{ document.created_at.strftime('%Y-%m-%d') }}</small>
+            </div>
+        </div>
+        
+        {% if document.description %}
+        <p class="card-text small mb-3">{{ document.description }}</p>
+        {% endif %}
+        
+        <div class="d-flex justify-content-between mt-auto">
+            <a href="{{ url_for('view_document', document_id=document.id) }}" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-download me-1"></i>
+                {% if current_user.language_preference == 'ar' %}
+                تنزيل
+                {% else %}
+                Download
+                {% endif %}
+            </a>
+            <form action="{{ url_for('delete_document', document_id=document.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this document?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <i class="fa-solid fa-trash me-1"></i>
+                    {% if current_user.language_preference == 'ar' %}
+                    حذف
+                    {% else %}
+                    Delete
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

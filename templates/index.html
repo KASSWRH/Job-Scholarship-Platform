@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+
+{% block title %}HireScholar - Job & Scholarship Search Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5 bg-light rounded-3">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 {{ 'order-lg-2' if current_user.is_authenticated and current_user.language_preference == 'ar' else '' }}">
+                <h1 class="display-5 fw-bold mb-3">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    ابحث عن <span class="text-primary">فرص العمل والمنح الدراسية</span> وقم بإدارة وثائقك
+                    {% else %}
+                    Find <span class="text-primary">Jobs & Scholarships</span> and Manage Your Documents
+                    {% endif %}
+                </h1>
+                <p class="lead mb-4">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    منصة شاملة للبحث عن الوظائف والمنح الدراسية مع إمكانية توليد المستندات المهنية وإدارتها.
+                    {% else %}
+                    A comprehensive platform for job and scholarship search with professional document generation and management capabilities.
+                    {% endif %}
+                </p>
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="{{ url_for('jobs') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                        <i class="fa-solid fa-briefcase me-2"></i>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        استكشف الوظائف
+                        {% else %}
+                        Explore Jobs
+                        {% endif %}
+                    </a>
+                    <a href="{{ url_for('scholarships') }}" class="btn btn-outline-primary btn-lg px-4">
+                        <i class="fa-solid fa-graduation-cap me-2"></i>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        استكشف المنح
+                        {% else %}
+                        Explore Scholarships
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 {{ 'order-lg-1' if current_user.is_authenticated and current_user.language_preference == 'ar' else '' }} mt-5 mt-lg-0">
+                <div class="text-center">
+                    <svg width="500" height="300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="img-fluid">
+                        <rect width="800" height="600" fill="#F5F5F5" opacity="0.3"/>
+                        <circle cx="400" cy="300" r="200" fill="#0077B5" opacity="0.1"/>
+                        <rect x="300" y="200" width="250" height="300" rx="10" fill="#FFFFFF" stroke="#0077B5" stroke-width="2"/>
+                        <rect x="320" y="240" width="210" height="30" rx="5" fill="#00A0DC" opacity="0.5"/>
+                        <rect x="320" y="290" width="210" height="30" rx="5" fill="#00A0DC" opacity="0.3"/>
+                        <rect x="320" y="340" width="210" height="30" rx="5" fill="#00A0DC" opacity="0.3"/>
+                        <rect x="320" y="390" width="100" height="30" rx="5" fill="#34BE76" opacity="0.7"/>
+                        <rect x="250" y="150" width="250" height="300" rx="10" fill="#FFFFFF" stroke="#0077B5" stroke-width="2"/>
+                        <rect x="270" y="190" width="210" height="30" rx="5" fill="#0077B5" opacity="0.5"/>
+                        <rect x="270" y="240" width="210" height="30" rx="5" fill="#0077B5" opacity="0.3"/>
+                        <rect x="270" y="290" width="210" height="30" rx="5" fill="#0077B5" opacity="0.3"/>
+                        <rect x="270" y="340" width="210" height="30" rx="5" fill="#0077B5" opacity="0.3"/>
+                        <rect x="270" y="390" width="100" height="30" rx="5" fill="#34BE76" opacity="0.7"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Key Features Section -->
+<section class="my-5">
+    <div class="container">
+        <h2 class="text-center mb-5">
+            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+            ميزات منصتنا
+            {% else %}
+            Our Platform Features
+            {% endif %}
+        </h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary p-3 rounded-circle mb-3 mx-auto" style="width: 65px; height: 65px">
+                            <i class="fa-solid fa-search fa-2x"></i>
+                        </div>
+                        <h4 class="card-title">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            بحث شامل
+                            {% else %}
+                            Comprehensive Search
+                            {% endif %}
+                        </h4>
+                        <p class="card-text">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            ابحث وصفي فرص العمل والمنح الدراسية من مصادر موثوقة ومتحقق منها.
+                            {% else %}
+                            Search and filter job listings and scholarship opportunities from verified sources.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-secondary bg-opacity-10 text-secondary p-3 rounded-circle mb-3 mx-auto" style="width: 65px; height: 65px">
+                            <i class="fa-solid fa-file-alt fa-2x"></i>
+                        </div>
+                        <h4 class="card-title">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            توليد المستندات
+                            {% else %}
+                            Document Generation
+                            {% endif %}
+                        </h4>
+                        <p class="card-text">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            قم بإنشاء سيرة ذاتية وخطابات تغطية احترافية بناءً على متطلبات الوظيفة.
+                            {% else %}
+                            Generate professional CVs and cover letters based on job requirements.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-success bg-opacity-10 text-success p-3 rounded-circle mb-3 mx-auto" style="width: 65px; height: 65px">
+                            <i class="fa-solid fa-folder-open fa-2x"></i>
+                        </div>
+                        <h4 class="card-title">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            مساحة العمل الشخصية
+                            {% else %}
+                            Personal Workspace
+                            {% endif %}
+                        </h4>
+                        <p class="card-text">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            قم بتحميل المستندات وإدارتها وتنظيمها في مساحة عمل شخصية منظمة.
+                            {% else %}
+                            Upload, manage, and organize your documents in a personal organized workspace.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Jobs Section -->
+<section class="my-5 py-5 bg-light rounded-3">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">
+                {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                أحدث الوظائف
+                {% else %}
+                Recent Jobs
+                {% endif %}
+            </h2>
+            <a href="{{ url_for('jobs') }}" class="btn btn-outline-primary">
+                {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                عرض جميع الوظائف
+                {% else %}
+                View All Jobs
+                {% endif %}
+            </a>
+        </div>
+        
+        <div class="row g-4">
+            {% for job in recent_jobs %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm job-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-primary">{{ job.job_type }}</span>
+                            <small class="text-muted">{{ job.posted_at.strftime('%Y-%m-%d') }}</small>
+                        </div>
+                        <h5 class="card-title fw-bold">{{ job.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ job.company }}</h6>
+                        <p class="card-text mb-2">
+                            <i class="fa-solid fa-map-marker-alt me-1"></i> {{ job.location }}
+                        </p>
+                        <p class="card-text small text-truncate">{{ job.description[:100] }}...</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0">
+                        <a href="{{ url_for('job_detail', job_id=job.id) }}" class="btn btn-sm btn-outline-primary w-100">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            عرض التفاصيل
+                            {% else %}
+                            View Details
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Recent Scholarships Section -->
+<section class="my-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">
+                {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                أحدث المنح الدراسية
+                {% else %}
+                Recent Scholarships
+                {% endif %}
+            </h2>
+            <a href="{{ url_for('scholarships') }}" class="btn btn-outline-primary">
+                {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                عرض جميع المنح
+                {% else %}
+                View All Scholarships
+                {% endif %}
+            </a>
+        </div>
+        
+        <div class="row g-4">
+            {% for scholarship in recent_scholarships %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm scholarship-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-success">{{ scholarship.country }}</span>
+                            <small class="text-muted">{{ scholarship.deadline.strftime('%Y-%m-%d') if scholarship.deadline else '' }}</small>
+                        </div>
+                        <h5 class="card-title fw-bold">{{ scholarship.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ scholarship.organization }}</h6>
+                        <p class="card-text mb-2">
+                            <i class="fa-solid fa-book me-1"></i> {{ scholarship.field_of_study }}
+                        </p>
+                        <p class="card-text mb-2">
+                            <i class="fa-solid fa-money-bill-wave me-1"></i> {{ scholarship.amount }}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0">
+                        <a href="{{ url_for('scholarship_detail', scholarship_id=scholarship.id) }}" class="btn btn-sm btn-outline-success w-100">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            عرض التفاصيل
+                            {% else %}
+                            View Details
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="my-5 py-5 bg-primary text-white rounded-3">
+    <div class="container text-center">
+        <h2 class="mb-4">
+            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+            ابدأ رحلة البحث عن وظيفتك أو منحتك الدراسية اليوم
+            {% else %}
+            Start Your Job or Scholarship Search Journey Today
+            {% endif %}
+        </h2>
+        <p class="lead mb-4">
+            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+            انضم إلى الآلاف من الباحثين عن عمل والطلاب الذين يستخدمون منصتنا للعثور على فرصهم المثالية
+            {% else %}
+            Join thousands of job seekers and students using our platform to find their ideal opportunities
+            {% endif %}
+        </p>
+        {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">
+            <i class="fa-solid fa-user-plus me-2"></i> Register Now
+        </a>
+        {% else %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-light btn-lg">
+            <i class="fa-solid fa-tachometer-alt me-2"></i>
+            {% if current_user.language_preference == 'ar' %}
+            الذهاب إلى لوحة التحكم
+            {% else %}
+            Go to Dashboard
+            {% endif %}
+        </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

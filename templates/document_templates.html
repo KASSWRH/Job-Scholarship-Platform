@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if current_user.language_preference == 'ar' %}
+    قوالب المستندات - HireScholar
+    {% else %}
+    Document Templates - HireScholar
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="mb-3">
+            {% if current_user.language_preference == 'ar' %}
+            قوالب المستندات
+            {% else %}
+            Document Templates
+            {% endif %}
+        </h1>
+        <p class="lead">
+            {% if current_user.language_preference == 'ar' %}
+            استخدم هذه القوالب لإنشاء مستندات مهنية احترافية
+            {% else %}
+            Use these templates to create professional documents
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<!-- CV Templates -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white">
+        <h2 class="h5 mb-0">
+            {% if current_user.language_preference == 'ar' %}
+            قوالب السيرة الذاتية
+            {% else %}
+            CV / Resume Templates
+            {% endif %}
+        </h2>
+    </div>
+    <div class="card-body">
+        {% if cv_templates %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for template in cv_templates %}
+            <div class="col">
+                <div class="card h-100 border template-card">
+                    <div class="template-preview bg-light p-3 text-center">
+                        <i class="fa-solid fa-file-alt fa-4x text-primary mb-3"></i>
+                        <h5 class="card-title mb-0">{{ template.name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if template.description %}
+                        <p class="card-text small text-muted mb-3">{{ template.description }}</p>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between">
+                            <span class="badge bg-light text-dark">
+                                {% if template.is_arabic %}
+                                <i class="fa-solid fa-language me-1"></i> العربية
+                                {% else %}
+                                <i class="fa-solid fa-language me-1"></i> English
+                                {% endif %}
+                            </span>
+                            <span class="badge bg-primary">CV</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white text-center border-top-0">
+                        <a href="{{ url_for('create_document', template_type='cv', template_id=template.id) }}" class="btn btn-primary w-100">
+                            <i class="fa-solid fa-plus me-2"></i>
+                            {% if current_user.language_preference == 'ar' %}
+                            إنشاء باستخدام هذا القالب
+                            {% else %}
+                            Create using this Template
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center py-4">
+            <i class="fa-solid fa-info-circle fa-2x mb-3"></i>
+            <h5>
+                {% if current_user.language_preference == 'ar' %}
+                لا توجد قوالب سيرة ذاتية متاحة حاليًا
+                {% else %}
+                No CV templates available at the moment
+                {% endif %}
+            </h5>
+            <p>
+                {% if current_user.language_preference == 'ar' %}
+                يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالدعم
+                {% else %}
+                Please check back later or contact support
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Cover Letter Templates -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white">
+        <h2 class="h5 mb-0">
+            {% if current_user.language_preference == 'ar' %}
+            قوالب خطاب التغطية
+            {% else %}
+            Cover Letter Templates
+            {% endif %}
+        </h2>
+    </div>
+    <div class="card-body">
+        {% if cover_letter_templates %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for template in cover_letter_templates %}
+            <div class="col">
+                <div class="card h-100 border template-card">
+                    <div class="template-preview bg-light p-3 text-center">
+                        <i class="fa-solid fa-file-alt fa-4x text-secondary mb-3"></i>
+                        <h5 class="card-title mb-0">{{ template.name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if template.description %}
+                        <p class="card-text small text-muted mb-3">{{ template.description }}</p>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between">
+                            <span class="badge bg-light text-dark">
+                                {% if template.is_arabic %}
+                                <i class="fa-solid fa-language me-1"></i> العربية
+                                {% else %}
+                                <i class="fa-solid fa-language me-1"></i> English
+                                {% endif %}
+                            </span>
+                            <span class="badge bg-secondary">Cover Letter</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white text-center border-top-0">
+                        <a href="{{ url_for('create_document', template_type='cover_letter', template_id=template.id) }}" class="btn btn-secondary w-100">
+                            <i class="fa-solid fa-plus me-2"></i>
+                            {% if current_user.language_preference == 'ar' %}
+                            إنشاء باستخدام هذا القالب
+                            {% else %}
+                            Create using this Template
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center py-4">
+            <i class="fa-solid fa-info-circle fa-2x mb-3"></i>
+            <h5>
+                {% if current_user.language_preference == 'ar' %}
+                لا توجد قوالب خطاب تغطية متاحة حاليًا
+                {% else %}
+                No cover letter templates available at the moment
+                {% endif %}
+            </h5>
+            <p>
+                {% if current_user.language_preference == 'ar' %}
+                يرجى المحاولة مرة أخرى لاحقًا أو الاتصال بالدعم
+                {% else %}
+                Please check back later or contact support
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

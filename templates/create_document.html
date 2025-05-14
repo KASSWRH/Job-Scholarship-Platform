@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if current_user.language_preference == 'ar' %}
+    إنشاء {{ "سيرة ذاتية" if template_type == 'cv' else "خطاب تغطية" }} - HireScholar
+    {% else %}
+    Create {{ "CV" if template_type == 'cv' else "Cover Letter" }} - HireScholar
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="mb-3">
+            {% if current_user.language_preference == 'ar' %}
+            إنشاء {{ "سيرة ذاتية" if template_type == 'cv' else "خطاب تغطية" }} جديد
+            {% else %}
+            Create New {{ "CV" if template_type == 'cv' else "Cover Letter" }}
+            {% endif %}
+        </h1>
+        <p class="lead">
+            {% if current_user.language_preference == 'ar' %}
+            استخدام قالب: {{ template.name }}
+            {% else %}
+            Using template: {{ template.name }}
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('create_document', template_type=template_type, template_id=template.id) }}">
+                    <!-- Document Information -->
+                    <div class="mb-4">
+                        <h5 class="card-title mb-3">
+                            {% if current_user.language_preference == 'ar' %}
+                            معلومات المستند
+                            {% else %}
+                            Document Information
+                            {% endif %}
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="title" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                عنوان المستند
+                                {% else %}
+                                Document Title
+                                {% endif %}
+                            </label>
+                            <input type="text" class="form-control" id="title" name="title" required 
+                                   value="{{ 'CV - ' + template.name if template_type == 'cv' else 'Cover Letter - ' + template.name }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                وصف (اختياري)
+                                {% else %}
+                                Description (optional)
+                                {% endif %}
+                            </label>
+                            <textarea class="form-control" id="description" name="description" rows="2"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Personal Information -->
+                    <div class="mb-4">
+                        <h5 class="card-title mb-3">
+                            {% if current_user.language_preference == 'ar' %}
+                            المعلومات الشخصية
+                            {% else %}
+                            Personal Information
+                            {% endif %}
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="name" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                الاسم الكامل
+                                {% else %}
+                                Full Name
+                                {% endif %}
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" required
+                                   value="{{ current_user.first_name }} {{ current_user.last_name }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                البريد الإلكتروني
+                                {% else %}
+                                Email
+                                {% endif %}
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email" required
+                                   value="{{ current_user.email }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                رقم الهاتف
+                                {% else %}
+                                Phone Number
+                                {% endif %}
+                            </label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                    
+                    {% if template_type == 'cv' %}
+                    <!-- CV Specific Fields -->
+                    <div class="mb-4">
+                        <h5 class="card-title mb-3">
+                            {% if current_user.language_preference == 'ar' %}
+                            معلومات السيرة الذاتية
+                            {% else %}
+                            CV Information
+                            {% endif %}
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="summary" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                ملخص مهني
+                                {% else %}
+                                Professional Summary
+                                {% endif %}
+                            </label>
+                            <textarea class="form-control" id="summary" name="summary" rows="3" required></textarea>
+                            <div class="form-text">
+                                {% if current_user.language_preference == 'ar' %}
+                                ملخص موجز عن خبراتك ومهاراتك وأهدافك المهنية (2-3 جمل).
+                                {% else %}
+                                A brief summary of your experience, skills, and career goals (2-3 sentences).
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="education" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                التعليم
+                                {% else %}
+                                Education
+                                {% endif %}
+                            </label>
+                            <textarea class="form-control" id="education" name="education" rows="4" required></textarea>
+                            <div class="form-text">
+                                {% if current_user.language_preference == 'ar' %}
+                                أدخل معلومات تعليمك بتنسيق: المؤسسة التعليمية، الدرجة، سنة التخرج.
+                                {% else %}
+                                Enter your education information in format: Institution, Degree, Graduation Year.
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="experience" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                الخبرة المهنية
+                                {% else %}
+                                Work Experience
+                                {% endif %}
+                            </label>
+                            <textarea class="form-control" id="experience" name="experience" rows="6" required></textarea>
+                            <div class="form-text">
+                                {% if current_user.language_preference == 'ar' %}
+                                أدخل خبراتك المهنية بتنسيق: الشركة، المسمى الوظيفي، الفترة، المسؤوليات.
+                                {% else %}
+                                Enter your work experiences in format: Company, Position, Period, Responsibilities.
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="skills" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                المهارات
+                                {% else %}
+                                Skills
+                                {% endif %}
+                            </label>
+                            <textarea class="form-control" id="skills" name="skills" rows="3" required></textarea>
+                            <div class="form-text">
+                                {% if current_user.language_preference == 'ar' %}
+                                أدخل مهاراتك الرئيسية مفصولة بفواصل.
+                                {% else %}
+                                Enter your key skills separated by commas.
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% else %}
+                    <!-- Cover Letter Specific Fields -->
+                    <div class="mb-4">
+                        <h5 class="card-title mb-3">
+                            {% if current_user.language_preference == 'ar' %}
+                            معلومات خطاب التغطية
+                            {% else %}
+                            Cover Letter Information
+                            {% endif %}
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="company" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                اسم الشركة
+                                {% else %}
+                                Company Name
+                                {% endif %}
+                            </label>
+                            <input type="text" class="form-control" id="company" name="company" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="position" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                المسمى الوظيفي
+                                {% else %}
+                                Position Title
+                                {% endif %}
+                            </label>
+                            <input type="text" class="form-control" id="position" name="position" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="introduction" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                المقدمة
+                                {% else %}
+                                Introduction
+                                {% endif %}
+                            </label>
+                            <textarea class="form-control" id="introduction" name="introduction" rows="3" required></textarea>
+                            <div class="form-text">
+                                {% if current_user.language_preference == 'ar' %}
+                                فقرة المقدمة الخاصة بك (كيف علمت بالوظيفة ولماذا أنت مهتم).
+                                {% else %}
+                                Your introductory paragraph (how you learned about the position and why you're interested).
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="body" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                المحتوى الرئيسي
+                                {% else %}
+                                Main Body
+                                {% endif %}
+                            </label>
+                            <textarea class="form-control" id="body" name="body" rows="5" required></textarea>
+                            <div class="form-text">
+                                {% if current_user.language_preference == 'ar' %}
+                                وصف مؤهلاتك وخبراتك ذات الصلة بالوظيفة.
+                                {% else %}
+                                Describe your qualifications and relevant experience for the position.
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="conclusion" class="form-label">
+                                {% if current_user.language_preference == 'ar' %}
+                                الخاتمة
+                                {% else %}
+                                Conclusion
+                                {% endif %}
+                            </label>
+                            <textarea class="form-control" id="conclusion" name="conclusion" rows="2" required></textarea>
+                            <div class="form-text">
+                                {% if current_user.language_preference == 'ar' %}
+                                فقرة الخاتمة الخاصة بك (شكرا للنظر في طلبك وطلب المتابعة).
+                                {% else %}
+                                Your closing paragraph (thank you for consideration and request for follow-up).
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fa-solid fa-file-export me-2"></i>
+                            {% if current_user.language_preference == 'ar' %}
+                            إنشاء المستند
+                            {% else %}
+                            Generate Document
+                            {% endif %}
+                        </button>
+                        <a href="{{ url_for('document_templates') }}" class="btn btn-outline-secondary">
+                            {% if current_user.language_preference == 'ar' %}
+                            إلغاء
+                            {% else %}
+                            Cancel
+                            {% endif %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    {% if current_user.language_preference == 'ar' %}
+                    معلومات القالب
+                    {% else %}
+                    Template Information
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <i class="fa-solid fa-file-alt fa-4x {{ 'text-primary' if template_type == 'cv' else 'text-secondary' }} mb-3"></i>
+                    <h5>{{ template.name }}</h5>
+                </div>
+                
+                <div class="mb-3">
+                    <p class="card-text">{{ template.description }}</p>
+                </div>
+                
+                <ul class="list-group list-group-flush mb-0">
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span>
+                            {% if current_user.language_preference == 'ar' %}
+                            نوع المستند
+                            {% else %}
+                            Document Type
+                            {% endif %}
+                        </span>
+                        <span class="badge {{ 'bg-primary' if template_type == 'cv' else 'bg-secondary' }}">
+                            {{ "CV / Resume" if template_type == 'cv' else "Cover Letter" }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <span>
+                            {% if current_user.language_preference == 'ar' %}
+                            اللغة
+                            {% else %}
+                            Language
+                            {% endif %}
+                        </span>
+                        <span class="badge bg-light text-dark">
+                            {% if template.is_arabic %}
+                            <i class="fa-solid fa-language me-1"></i> العربية
+                            {% else %}
+                            <i class="fa-solid fa-language me-1"></i> English
+                            {% endif %}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    {% if current_user.language_preference == 'ar' %}
+                    نصائح للكتابة
+                    {% else %}
+                    Writing Tips
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% if template_type == 'cv' %}
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        استخدم أفعالًا قوية لوصف إنجازاتك المهنية
+                        {% else %}
+                        Use strong action verbs to describe your professional accomplishments
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        قم بتضمين البيانات والأرقام لتوضيح تأثيرك
+                        {% else %}
+                        Include data and metrics to demonstrate your impact
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        خصص مهاراتك وخبراتك للوظيفة التي تتقدم إليها
+                        {% else %}
+                        Tailor your skills and experiences to the job you're applying for
+                        {% endif %}
+                    </li>
+                    {% else %}
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        اجعل خطابك مخصصًا للشركة والوظيفة المحددة
+                        {% else %}
+                        Make your letter specific to the company and position
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        أظهر حماسك للوظيفة وثقافة الشركة
+                        {% else %}
+                        Show enthusiasm for the role and company culture
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        اربط بين خبراتك ومتطلبات الوظيفة
+                        {% else %}
+                        Connect your experiences to the job requirements
+                        {% endif %}
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/document-generator.js') }}"></script>
+{% endblock %}

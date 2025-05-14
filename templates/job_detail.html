@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+    {{ job.title }} - تفاصيل الوظيفة
+    {% else %}
+    {{ job.title }} - Job Details
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Main Content -->
+    <div class="col-lg-8">
+        <!-- Job Details Card -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <span class="badge bg-primary mb-2">{{ job.job_type }}</span>
+                        <h1 class="h2 mb-1">{{ job.title }}</h1>
+                        <h5 class="text-muted">{{ job.company }}</h5>
+                    </div>
+                    
+                    {% if current_user.is_authenticated %}
+                        {% if is_saved %}
+                        <form action="{{ url_for('unsave_job', job_id=job.id) }}" method="POST">
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fa-solid fa-bookmark me-2"></i>
+                                {% if current_user.language_preference == 'ar' %}
+                                محفوظ
+                                {% else %}
+                                Saved
+                                {% endif %}
+                            </button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('save_job', job_id=job.id) }}" method="POST">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-regular fa-bookmark me-2"></i>
+                                {% if current_user.language_preference == 'ar' %}
+                                حفظ الوظيفة
+                                {% else %}
+                                Save Job
+                                {% endif %}
+                            </button>
+                        </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-light rounded-circle p-2 me-2">
+                                <i class="fa-solid fa-map-marker-alt text-primary"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    الموقع
+                                    {% else %}
+                                    Location
+                                    {% endif %}
+                                </small>
+                                <span>{{ job.location }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-light rounded-circle p-2 me-2">
+                                <i class="fa-solid fa-money-bill-wave text-primary"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    الراتب
+                                    {% else %}
+                                    Salary
+                                    {% endif %}
+                                </small>
+                                <span>{{ job.salary_range or 'Not disclosed' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-light rounded-circle p-2 me-2">
+                                <i class="fa-solid fa-calendar-alt text-primary"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    تاريخ النشر
+                                    {% else %}
+                                    Posted Date
+                                    {% endif %}
+                                </small>
+                                <span>{{ job.posted_at.strftime('%Y-%m-%d') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-light rounded-circle p-2 me-2">
+                                <i class="fa-solid fa-briefcase text-primary"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    نوع الوظيفة
+                                    {% else %}
+                                    Job Type
+                                    {% endif %}
+                                </small>
+                                <span>{{ job.job_type }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <!-- Job Description -->
+                <div class="mt-4">
+                    <h5>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        الوصف الوظيفي
+                        {% else %}
+                        Job Description
+                        {% endif %}
+                    </h5>
+                    <div class="job-description">
+                        {{ job.description|safe }}
+                    </div>
+                </div>
+                
+                <!-- Job Requirements -->
+                <div class="mt-4">
+                    <h5>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        متطلبات الوظيفة
+                        {% else %}
+                        Requirements
+                        {% endif %}
+                    </h5>
+                    <div class="job-requirements">
+                        {{ job.requirements|safe }}
+                    </div>
+                </div>
+                
+                {% if job.url %}
+                <div class="mt-4 text-center">
+                    <a href="{{ job.url }}" target="_blank" class="btn btn-primary btn-lg">
+                        <i class="fa-solid fa-external-link-alt me-2"></i>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        التقدم للوظيفة
+                        {% else %}
+                        Apply for this Job
+                        {% endif %}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+        <!-- Document Generation -->
+        {% if current_user.is_authenticated %}
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    {% if current_user.language_preference == 'ar' %}
+                    إنشاء المستندات
+                    {% else %}
+                    Create Documents
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">
+                    {% if current_user.language_preference == 'ar' %}
+                    قم بإنشاء مستندات مخصصة لهذه الوظيفة
+                    {% else %}
+                    Generate customized documents for this job
+                    {% endif %}
+                </p>
+                
+                <!-- CV Templates -->
+                <h6 class="card-subtitle mb-2">
+                    {% if current_user.language_preference == 'ar' %}
+                    السيرة الذاتية
+                    {% else %}
+                    CV / Resume
+                    {% endif %}
+                </h6>
+                
+                <div class="list-group mb-3">
+                    {% for template in cv_templates %}
+                    <a href="{{ url_for('create_document', template_type='cv', template_id=template.id) }}" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="fa-solid fa-file-alt text-primary me-2"></i>
+                        {{ template.name }}
+                        <i class="fa-solid fa-chevron-right ms-auto"></i>
+                    </a>
+                    {% endfor %}
+                </div>
+                
+                <!-- Cover Letter Templates -->
+                <h6 class="card-subtitle mb-2">
+                    {% if current_user.language_preference == 'ar' %}
+                    خطاب التغطية
+                    {% else %}
+                    Cover Letter
+                    {% endif %}
+                </h6>
+                
+                <div class="list-group">
+                    {% for template in cover_letter_templates %}
+                    <a href="{{ url_for('create_document', template_type='cover_letter', template_id=template.id) }}" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="fa-solid fa-file-alt text-primary me-2"></i>
+                        {{ template.name }}
+                        <i class="fa-solid fa-chevron-right ms-auto"></i>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Related Jobs -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    وظائف مشابهة
+                    {% else %}
+                    Similar Jobs
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                {% if related_jobs %}
+                <div class="list-group list-group-flush">
+                    {% for rel_job in related_jobs %}
+                    <a href="{{ url_for('job_detail', job_id=rel_job.id) }}" class="list-group-item list-group-item-action p-3">
+                        <h6 class="mb-1">{{ rel_job.title }}</h6>
+                        <p class="mb-1 text-muted small">{{ rel_job.company }}</p>
+                        <div class="d-flex justify-content-between">
+                            <small>
+                                <i class="fa-solid fa-map-marker-alt me-1"></i>
+                                {{ rel_job.location }}
+                            </small>
+                            <small class="text-muted">{{ rel_job.posted_at.strftime('%Y-%m-%d') }}</small>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="p-4 text-center text-muted">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    لا توجد وظائف مشابهة في الوقت الحالي
+                    {% else %}
+                    No similar jobs found at the moment
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

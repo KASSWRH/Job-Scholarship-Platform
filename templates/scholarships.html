@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+    المنح الدراسية - HireScholar
+    {% else %}
+    Scholarships - HireScholar
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="mb-3">
+            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+            استكشف المنح الدراسية
+            {% else %}
+            Explore Scholarships
+            {% endif %}
+        </h1>
+        <p class="lead">
+            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+            ابحث عن منح دراسية من مؤسسات ومنظمات موثوقة
+            {% else %}
+            Search for scholarships from trusted institutions and organizations
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<!-- Search and Filters -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+        <form method="GET" action="{{ url_for('scholarships') }}" class="row g-3">
+            <div class="col-md-6">
+                <label for="search" class="form-label">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    البحث عن منح
+                    {% else %}
+                    Search Scholarships
+                    {% endif %}
+                </label>
+                <div class="input-group">
+                    {{ form.search(class="form-control", placeholder="Scholarship title, organization, or keywords") }}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-search me-2"></i>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        بحث
+                        {% else %}
+                        Search
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="country" class="form-label">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    الدولة
+                    {% else %}
+                    Country
+                    {% endif %}
+                </label>
+                {{ form.country(class="form-select") }}
+            </div>
+            <div class="col-md-3">
+                <label for="field_of_study" class="form-label">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    مجال الدراسة
+                    {% else %}
+                    Field of Study
+                    {% endif %}
+                </label>
+                {{ form.field_of_study(class="form-select") }}
+            </div>
+            
+            <!-- Collapsible Filters -->
+            <div class="col-12">
+                <div class="accordion" id="advancedFilters">
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header" id="headingAdvanced">
+                            <button class="accordion-button collapsed bg-light py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced">
+                                {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                فلاتر متقدمة
+                                {% else %}
+                                Advanced Filters
+                                {% endif %}
+                            </button>
+                        </h2>
+                        <div id="collapseAdvanced" class="accordion-collapse collapse" aria-labelledby="headingAdvanced">
+                            <div class="accordion-body p-3">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <label for="degree_level" class="form-label">
+                                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                            مستوى الدرجة العلمية
+                                            {% else %}
+                                            Degree Level
+                                            {% endif %}
+                                        </label>
+                                        {{ form.degree_level(class="form-select") }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="funding_type" class="form-label">
+                                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                            نوع التمويل
+                                            {% else %}
+                                            Funding Type
+                                            {% endif %}
+                                        </label>
+                                        {{ form.funding_type(class="form-select") }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="deadline_period" class="form-label">
+                                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                            فترة الموعد النهائي
+                                            {% else %}
+                                            Deadline Period
+                                            {% endif %}
+                                        </label>
+                                        {{ form.deadline_period(class="form-select") }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="eligibility" class="form-label">
+                                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                            الأهلية
+                                            {% else %}
+                                            Eligibility
+                                            {% endif %}
+                                        </label>
+                                        {{ form.eligibility(class="form-select") }}
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check form-switch">
+                                            {{ form.external_search(class="form-check-input") }}
+                                            <label class="form-check-label" for="external_search">
+                                                {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                                تضمين المصادر الخارجية (Google Scholar, Academic Portals)
+                                                {% else %}
+                                                Include external sources (Google Scholar, Academic Portals)
+                                                {% endif %}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <div>
+                    {% if form.search.data or form.country.data or form.field_of_study.data or form.degree_level.data or form.funding_type.data or form.deadline_period.data or form.eligibility.data %}
+                    <a href="{{ url_for('scholarships') }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fa-solid fa-times me-1"></i>
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        إزالة التصفية
+                        {% else %}
+                        Clear Filters
+                        {% endif %}
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center">
+                    <label for="sort_by" class="form-label me-2 mb-0">
+                        {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                        ترتيب حسب:
+                        {% else %}
+                        Sort by:
+                        {% endif %}
+                    </label>
+                    {{ form.sort_by(class="form-select form-select-sm", style="width: auto;") }}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results -->
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0">
+                {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                {{ scholarships.total }} نتائج
+                {% else %}
+                {{ scholarships.total }} Results
+                {% endif %}
+            </h2>
+        </div>
+        
+        {% if scholarships.items %}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for scholarship in scholarships.items %}
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm scholarship-card">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-success">{{ scholarship.country }}</span>
+                                {% if scholarship.deadline %}
+                                <small class="text-muted">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    الموعد النهائي: {{ scholarship.deadline.strftime('%Y-%m-%d') }}
+                                    {% else %}
+                                    Deadline: {{ scholarship.deadline.strftime('%Y-%m-%d') }}
+                                    {% endif %}
+                                </small>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title fw-bold mb-2">{{ scholarship.title }}</h5>
+                            <h6 class="card-subtitle mb-3 text-muted">{{ scholarship.organization }}</h6>
+                            <p class="card-text mb-2">
+                                <i class="fa-solid fa-book me-1"></i> {{ scholarship.field_of_study }}
+                            </p>
+                            <p class="card-text mb-2">
+                                <i class="fa-solid fa-money-bill-wave me-1"></i> {{ scholarship.amount }}
+                            </p>
+                            <p class="card-text small text-truncate mb-3">{{ scholarship.description[:150] }}...</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <a href="{{ url_for('scholarship_detail', scholarship_id=scholarship.id) }}" class="btn btn-outline-success">
+                                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                                    عرض التفاصيل
+                                    {% else %}
+                                    View Details
+                                    {% endif %}
+                                </a>
+                                {% if current_user.is_authenticated %}
+                                    {% if scholarship.id in saved_scholarship_ids %}
+                                    <form action="{{ url_for('unsave_scholarship', scholarship_id=scholarship.id) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                            <i class="fa-solid fa-bookmark"></i>
+                                            {% if current_user.language_preference == 'ar' %}
+                                            محفوظ
+                                            {% else %}
+                                            Saved
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <form action="{{ url_for('save_scholarship', scholarship_id=scholarship.id) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                            <i class="fa-regular fa-bookmark"></i>
+                                            {% if current_user.language_preference == 'ar' %}
+                                            حفظ
+                                            {% else %}
+                                            Save
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if scholarships.pages > 1 %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if scholarships.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('scholarships', page=scholarships.prev_num, search=form.search.data, country=form.country.data, field_of_study=form.field_of_study.data, sort_by=form.sort_by.data) }}">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            السابق
+                            {% else %}
+                            Previous
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            السابق
+                            {% else %}
+                            Previous
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for page_num in scholarships.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                        {% if page_num %}
+                            {% if page_num == scholarships.page %}
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#">{{ page_num }}</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('scholarships', page=page_num, search=form.search.data, country=form.country.data, field_of_study=form.field_of_study.data, sort_by=form.sort_by.data) }}">{{ page_num }}</a>
+                            </li>
+                            {% endif %}
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">...</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if scholarships.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('scholarships', page=scholarships.next_num, search=form.search.data, country=form.country.data, field_of_study=form.field_of_study.data, sort_by=form.sort_by.data) }}">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            التالي
+                            {% else %}
+                            Next
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                            {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                            التالي
+                            {% else %}
+                            Next
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+        {% else %}
+            <div class="alert alert-info text-center py-5">
+                <i class="fa-solid fa-search fa-3x mb-3"></i>
+                <h4>
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    لم يتم العثور على منح دراسية
+                    {% else %}
+                    No Scholarships Found
+                    {% endif %}
+                </h4>
+                <p>
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    حاول تعديل معايير البحث الخاصة بك وحاول مرة أخرى.
+                    {% else %}
+                    Try adjusting your search criteria and try again.
+                    {% endif %}
+                </p>
+                <a href="{{ url_for('scholarships') }}" class="btn btn-outline-success mt-2">
+                    {% if current_user.is_authenticated and current_user.language_preference == 'ar' %}
+                    إعادة تعيين البحث
+                    {% else %}
+                    Reset Search
+                    {% endif %}
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

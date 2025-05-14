@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if current_user.language_preference == 'ar' %}
+    تحميل وثيقة - HireScholar
+    {% else %}
+    Upload Document - HireScholar
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="mb-3">
+            {% if current_user.language_preference == 'ar' %}
+            تحميل وثيقة
+            {% else %}
+            Upload Document
+            {% endif %}
+        </h1>
+        <p class="lead">
+            {% if current_user.language_preference == 'ar' %}
+            أضف وثائق مهنية إلى مساحة العمل الخاصة بك
+            {% else %}
+            Add professional documents to your workspace
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('upload_document') }}" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        <label for="title" class="form-label">
+                            {% if current_user.language_preference == 'ar' %}
+                            عنوان الوثيقة
+                            {% else %}
+                            Document Title
+                            {% endif %}
+                        </label>
+                        {{ form.title(class="form-control", placeholder="Enter a title for your document") }}
+                        {% if form.title.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.title.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">
+                            {% if current_user.language_preference == 'ar' %}
+                            الوصف (اختياري)
+                            {% else %}
+                            Description (optional)
+                            {% endif %}
+                        </label>
+                        {{ form.description(class="form-control", placeholder="Enter a brief description of this document", rows="3") }}
+                        {% if form.description.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.description.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="document_type" class="form-label">
+                            {% if current_user.language_preference == 'ar' %}
+                            نوع الوثيقة
+                            {% else %}
+                            Document Type
+                            {% endif %}
+                        </label>
+                        {{ form.document_type(class="form-select") }}
+                        {% if form.document_type.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.document_type.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="file" class="form-label">
+                            {% if current_user.language_preference == 'ar' %}
+                            ملف الوثيقة
+                            {% else %}
+                            Document File
+                            {% endif %}
+                        </label>
+                        <div class="input-group mb-3">
+                            {{ form.file(class="form-control", id="fileInput") }}
+                            <label class="input-group-text" for="fileInput">
+                                <i class="fa-solid fa-upload"></i>
+                            </label>
+                        </div>
+                        <div class="form-text" id="fileHelp">
+                            {% if current_user.language_preference == 'ar' %}
+                            الملفات المسموحة: PDF، DOC، DOCX (الحد الأقصى: 16 ميجابايت)
+                            {% else %}
+                            Allowed file types: PDF, DOC, DOCX (Max: 16MB)
+                            {% endif %}
+                        </div>
+                        {% if form.file.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.file.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fa-solid fa-upload me-2"></i>
+                            {% if current_user.language_preference == 'ar' %}
+                            تحميل الوثيقة
+                            {% else %}
+                            Upload Document
+                            {% endif %}
+                        </button>
+                        <a href="{{ url_for('documents') }}" class="btn btn-outline-secondary">
+                            {% if current_user.language_preference == 'ar' %}
+                            إلغاء
+                            {% else %}
+                            Cancel
+                            {% endif %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    {% if current_user.language_preference == 'ar' %}
+                    إرشادات التحميل
+                    {% else %}
+                    Upload Guidelines
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush mb-0">
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        استخدم عناوين واضحة ووصفية
+                        {% else %}
+                        Use clear, descriptive titles
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        تأكد من أن مستنداتك محدثة
+                        {% else %}
+                        Ensure your documents are up-to-date
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        اختر نوع المستند المناسب للتصنيف الصحيح
+                        {% else %}
+                        Choose the appropriate document type for proper categorization
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item px-0">
+                        <i class="fa-solid fa-check-circle text-success me-2"></i>
+                        {% if current_user.language_preference == 'ar' %}
+                        يجب ألا يتجاوز حجم الملف 16 ميجابايت
+                        {% else %}
+                        File size must not exceed 16MB
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    {% if current_user.language_preference == 'ar' %}
+                    أنواع الوثائق المدعومة
+                    {% else %}
+                    Supported Document Types
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row row-cols-1 row-cols-sm-2 g-3">
+                    <div class="col">
+                        <div class="p-3 border rounded text-center">
+                            <i class="fa-solid fa-file-pdf fa-2x text-danger mb-2"></i>
+                            <p class="mb-0">PDF</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3 border rounded text-center">
+                            <i class="fa-solid fa-file-word fa-2x text-primary mb-2"></i>
+                            <p class="mb-0">DOC/DOCX</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mt-3 mb-0">
+                    <i class="fa-solid fa-info-circle me-2"></i>
+                    {% if current_user.language_preference == 'ar' %}
+                    هل تحتاج إلى إنشاء مستند جديد؟ 
+                    <a href="{{ url_for('document_templates') }}">استخدم قوالبنا</a>
+                    {% else %}
+                    Need to create a new document? 
+                    <a href="{{ url_for('document_templates') }}">Use our templates</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Show selected filename
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        var fileName = e.target.files[0].name;
+        var fileSize = (e.target.files[0].size / 1024 / 1024).toFixed(2);
+        var fileInfo = document.getElementById('fileHelp');
+        {% if current_user.language_preference == 'ar' %}
+        fileInfo.textContent = 'الملف المختار: ' + fileName + ' (' + fileSize + ' ميجابايت)';
+        {% else %}
+        fileInfo.textContent = 'Selected file: ' + fileName + ' (' + fileSize + ' MB)';
+        {% endif %}
+    });
+</script>
+{% endblock %}

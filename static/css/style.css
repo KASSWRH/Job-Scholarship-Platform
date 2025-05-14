@@ -1,0 +1,360 @@
+/**
+ * HireScholar - Job & Scholarship Search Platform
+ * Main Stylesheet
+ */
+
+/* Global Variables */
+:root {
+    /* Brand Colors */
+    --primary: #0077B5;
+    --secondary: #00A0DC;
+    --background: #F5F5F5;
+    --text: #2C3E50;
+    --accent: #34BE76;
+    
+    /* Utility Colors */
+    --light-gray: #E9ECEF;
+    --medium-gray: #ADB5BD;
+    --dark-gray: #495057;
+    --danger: #DC3545;
+    --warning: #FFC107;
+    --info: #17A2B8;
+    
+    /* Fonts */
+    --font-english: 'Inter', sans-serif;
+    --font-arabic: 'Noto Sans Arabic', 'IBM Plex Sans Arabic', sans-serif;
+}
+
+/* Base Styles */
+body {
+    font-family: var(--font-english);
+    color: var(--text);
+    background-color: var(--background);
+    line-height: 1.6;
+}
+
+[lang="ar"] {
+    font-family: var(--font-arabic);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--secondary);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #005e8b;
+    border-color: #005e8b;
+}
+
+.btn-secondary {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+    background-color: #0082b3;
+    border-color: #0082b3;
+}
+
+.btn-success {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.btn-success:hover, .btn-success:focus {
+    background-color: #2aa567;
+    border-color: #2aa567;
+}
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-success {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.btn-outline-success:hover, .btn-outline-success:focus {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* Badges */
+.badge.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+.badge.bg-secondary {
+    background-color: var(--secondary) !important;
+}
+
+.badge.bg-success {
+    background-color: var(--accent) !important;
+}
+
+/* Cards */
+.card {
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid var(--light-gray);
+    padding: 1rem 1.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Job and Scholarship Cards */
+.job-card, .scholarship-card {
+    height: 100%;
+}
+
+.job-card .badge, .scholarship-card .badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+}
+
+/* Document Cards */
+.document-card .document-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Notifications */
+.notification-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-badge {
+    font-size: 0.65rem;
+    margin-left: -0.5rem;
+    margin-top: -0.25rem;
+}
+
+/* Unread notifications styling */
+.unread {
+    background-color: rgba(0, 119, 181, 0.05);
+}
+
+/* Forms */
+.form-control:focus, .form-select:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 0.25rem rgba(0, 160, 220, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* RTL Support */
+[dir="rtl"] .ms-auto {
+    margin-right: auto !important;
+    margin-left: 0 !important;
+}
+
+[dir="rtl"] .me-auto {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+}
+
+[dir="rtl"] .ms-1,
+[dir="rtl"] .ms-2,
+[dir="rtl"] .ms-3,
+[dir="rtl"] .ms-4,
+[dir="rtl"] .ms-5 {
+    margin-right: 0.25rem !important;
+    margin-right: 0.5rem !important;
+    margin-right: 1rem !important;
+    margin-right: 1.5rem !important;
+    margin-right: 3rem !important;
+    margin-left: 0 !important;
+}
+
+[dir="rtl"] .me-1,
+[dir="rtl"] .me-2,
+[dir="rtl"] .me-3,
+[dir="rtl"] .me-4,
+[dir="rtl"] .me-5 {
+    margin-left: 0.25rem !important;
+    margin-left: 0.5rem !important;
+    margin-left: 1rem !important;
+    margin-left: 1.5rem !important;
+    margin-left: 3rem !important;
+    margin-right: 0 !important;
+}
+
+[dir="rtl"] .ps-1,
+[dir="rtl"] .ps-2,
+[dir="rtl"] .ps-3,
+[dir="rtl"] .ps-4,
+[dir="rtl"] .ps-5 {
+    padding-right: 0.25rem !important;
+    padding-right: 0.5rem !important;
+    padding-right: 1rem !important;
+    padding-right: 1.5rem !important;
+    padding-right: 3rem !important;
+    padding-left: 0 !important;
+}
+
+[dir="rtl"] .pe-1,
+[dir="rtl"] .pe-2,
+[dir="rtl"] .pe-3,
+[dir="rtl"] .pe-4,
+[dir="rtl"] .pe-5 {
+    padding-left: 0.25rem !important;
+    padding-left: 0.5rem !important;
+    padding-left: 1rem !important;
+    padding-left: 1.5rem !important;
+    padding-left: 3rem !important;
+    padding-right: 0 !important;
+}
+
+/* Template Preview */
+.template-preview {
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.template-card:hover .template-preview {
+    background-color: rgba(0, 119, 181, 0.05);
+}
+
+/* Feature Icons */
+.feature-icon {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hero Section */
+.hero-section {
+    padding: 4rem 0;
+    background-color: rgba(0, 119, 181, 0.05);
+}
+
+/* Footer */
+footer {
+    background-color: #fff;
+    padding: 3rem 0 1.5rem;
+    margin-top: 3rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .hero-section {
+        padding: 2rem 0;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .notification-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Document Generator Page */
+.document-form-container {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+}
+
+/* Avatar Placeholder */
+.avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Job and Scholarship Detail Pages */
+.icon-box {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Dashboard Statistics */
+.stat-card {
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    background-color: rgba(0, 119, 181, 0.05);
+}
+
+/* Print Styles */
+@media print {
+    nav, footer, .no-print {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    body {
+        background-color: white;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+    }
+}
